@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <title>Search the Toora Pear Orchard</title>
+        <!--<meta name="viewport" content="width=device-width, initial-scale=1" />-->
+        
+
+		  <!-- CSS
+		  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+		<!--[if lte IE 8]>
+		<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.ie.css" />
+		<![endif]-->
+		
+		
+		<<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>-->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		<script src="https://cdn.firebase.com/js/client/2.1.1/firebase.js"></script>
+		<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
+		<!--<script type="text/javascript" src="Leaflet.Coordinates-master/dist/Leaflet.Coordinates-0.1.4.min.js"></script>-->
+		
+		<script>
+
+        // Get a reference to the root of the orchard data.
+        var toorapearsRef = new Firebase('https://toorapears.firebaseio.com/Trees');
+
+		 //Load all trees when page loads
+		$(document).ready(function() {
+				//for (i=0; i<=110; i++){
+				  
+				//	 var treeRef = toorapearsRef.child (i);
+				//	 treeRef.on('value', function(snapshot) {
+				//				var pearDescription = snapshot.val().Description;
+				//				var treeName = snapshot.val().Name;
+				//				var treeNumber = snapshot.val().Number;
+				//				var treeUses = snapshot.val().Uses;
+				//				
+				//				$('#myList').append('<li><h3>' + 'Tree Number: ' + treeNumber + '</h3><p><strong>' + 'Tree Name is: ' + treeName + ' </strong></p><p>' + 'Uses are: ' + treeUses + '</p><p>' + 'Description of the pear: ' + pearDescription + '</p></li>');
+				//				$('#myList').listview('refresh');
+				//			});
+				//	};
+				    
+				<!-- Search orchard by importing all records from firebase and using jquery list search function.-->
+				<!-- add buttons to search for what is ripe now(todays date), eating or cooking pears-->
+
+				<!--Leaflet script to add the map-->
+				
+					 
+						var mapMinZoom = 3;
+						var mapMaxZoom = 4;
+						var map = L.map('map', {
+							maxZoom: mapMaxZoom,
+							minZoom: mapMinZoom,
+							crs: L.CRS.Simple
+							}).setView([0, 0], mapMinZoom);
+						
+						var mapBounds = new L.LatLngBounds(
+							map.unproject([0, 2048], mapMaxZoom),
+							map.unproject([2560, 0], mapMaxZoom));
+							
+						map.setMaxBounds(mapBounds);
+					
+						L.tileLayer('{z}/{x}/{y}.png', {
+							attribution: 'Map by Rob',
+							noWrap: true          
+							}).addTo(map);
+
+					//Markers
+
+					//Define Tree Marker
+					var treeIcon = L.icon({
+							iconUrl: 'mapIcons/treeIconLarge.png',
+							iconRetinaUrl: '',
+							iconSize: [38, 38],
+							iconAnchor: [22, 19],
+							popupAnchor: [-3, -76]
+						});
+
+					//Put Marker on map
+					var marker = L.marker(map.unproject([550, 550]), {
+						icon: treeIcon
+						}).addTo(map);
+
+					//GUI
+					  
+					 //Leaflet.Coordinates(shows latlng)
+					//L.control.coordinates({
+						//	position:"bottomleft", //optional default "bootomright"
+						//	decimals:2, //optional default 4
+						//	decimalSeperator:".", //optional default "."
+						//	labelTemplateLat:"Latitude: {y}", //optional default "Lat: {y}"
+						//	labelTemplateLng:"Longitude: {x}", //optional default "Lng: {x}"
+						//	enableUserInput:true, //optional default true
+						// useDMS:false, //optional default false
+						//	useLatLngOrder: true //ordering of labels, default false-> lng-lat
+						//}).addTo(map);
+					
+		});	
+			</script>
+			<style><!--style the map-->
+			body { padding: 0; margin: 0; }
+			html, body, #map {  height:400px; }
+
+			</style>
+</head>
+
+<body>
+
+<div class="container">
+
+		<div class="row">
+			<div class="col-sm-8">
+				<div id="map">
+				</div>
+			</div>
+			<div  class="col-sm-4">
+				<div id="myList">
+				<h2>Type the number or name of the tree you are interested in.</h2>
+				</div>			
+			</div>
+		</div><!--row-->
+		
+</div><!---container---> 
+</body>
+</html>
